@@ -1,0 +1,920 @@
+<!doctype html>
+<html lang="en" class="h-full antialiased">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Intelligence Revenue System — AI-Powered Community Intelligence</title>
+    <meta
+      name="description"
+      content="A multi-organization platform that transforms how community nonprofits understand, engage, and grow their base through AI-driven donor intelligence, automated outreach, and real-time analytics."
+    />
+    <meta
+      name="keywords"
+      content="nonprofit intelligence, donor analytics, community engagement, AI automation, Salesforce, n8n"
+    />
+    <meta property="og:title" content="Intelligence Revenue System" />
+    <meta
+      property="og:description"
+      content="AI-powered community intelligence for nonprofits"
+    />
+    <meta property="og:type" content="website" />
+
+    <!-- Geist Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Geist+Mono:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Tailwind CSS Play CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Geist", "-apple-system", "BlinkMacSystemFont", "sans-serif"],
+              mono: ["Geist Mono", "monospace"],
+            },
+          },
+        },
+      };
+    </script>
+
+    <style>
+      :root {
+        --glass-bg: rgba(255, 255, 255, 0.55);
+        --glass-border: rgba(255, 255, 255, 0.25);
+        --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+        --glass-blur: blur(20px) saturate(180%);
+        --accent-1: #0ea5e9;
+        --accent-2: #a78bfa;
+        --accent-3: #ec4899;
+        --accent-4: #14b8a6;
+        --text-primary: #0f172a;
+        --text-secondary: #475569;
+        --text-muted: #94a3b8;
+      }
+
+      * {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+
+      body {
+        background: #f0f4f8;
+        color: var(--text-primary);
+        font-family:
+          "Geist",
+          -apple-system,
+          BlinkMacSystemFont,
+          sans-serif;
+        overflow-x: hidden;
+      }
+
+      /* Animated gradient background */
+      .gradient-bg {
+        background: linear-gradient(
+          135deg,
+          #93c5fd 0%,
+          #c4b5fd 25%,
+          #fbcfe8 50%,
+          #a5f3fc 75%,
+          #bae6fd 100%
+        );
+        background-size: 400% 400%;
+        animation: gradientShift 30s ease infinite;
+      }
+
+      @keyframes gradientShift {
+        0% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+
+      /* Liquid Glass material */
+      .glass {
+        background: var(--glass-bg);
+        backdrop-filter: var(--glass-blur);
+        -webkit-backdrop-filter: var(--glass-blur);
+        border: 1px solid var(--glass-border);
+        box-shadow: var(--glass-shadow);
+        border-radius: 24px;
+      }
+
+      .glass-dark {
+        background: rgba(15, 23, 42, 0.65);
+        backdrop-filter: var(--glass-blur);
+        -webkit-backdrop-filter: var(--glass-blur);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        border-radius: 24px;
+      }
+
+      .glass-card {
+        background: rgba(255, 255, 255, 0.45);
+        backdrop-filter: blur(16px) saturate(160%);
+        -webkit-backdrop-filter: blur(16px) saturate(160%);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+        border-radius: 20px;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      .glass-card:hover {
+        background: rgba(255, 255, 255, 0.6);
+        border: 1px solid rgba(255, 255, 255, 0.5);
+        box-shadow: 0 8px 40px rgba(0, 0, 0, 0.12);
+        transform: translateY(-4px);
+      }
+
+      /* Floating orbs */
+      .orb {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(80px);
+        opacity: 0.3;
+        animation: float 20s ease-in-out infinite;
+      }
+
+      .orb-1 {
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(circle, #a5b4fc, transparent);
+        top: -100px;
+        left: -100px;
+        animation-delay: 0s;
+      }
+
+      .orb-2 {
+        width: 350px;
+        height: 350px;
+        background: radial-gradient(circle, #f5d0fe, transparent);
+        top: 30%;
+        right: -80px;
+        animation-delay: 5s;
+      }
+
+      .orb-3 {
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(circle, #a5f3fc, transparent);
+        bottom: 10%;
+        left: 20%;
+        animation-delay: 10s;
+      }
+
+      .orb-4 {
+        width: 250px;
+        height: 250px;
+        background: radial-gradient(circle, #fde68a, transparent);
+        bottom: -50px;
+        right: 30%;
+        animation-delay: 7s;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translate(0, 0) scale(1);
+        }
+        33% {
+          transform: translate(30px, -40px) scale(1.05);
+        }
+        66% {
+          transform: translate(-20px, 30px) scale(0.95);
+        }
+      }
+
+      /* Shimmer effect for text */
+      .shimmer-text {
+        background: linear-gradient(90deg, #0f172a 0%, #818cf8 50%, #0f172a 100%);
+        background-size: 200% auto;
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        animation: shimmer 3s linear infinite;
+      }
+
+      @keyframes shimmer {
+        to {
+          background-position: 200% center;
+        }
+      }
+
+      /* Fade-in animation */
+      .fade-in-up {
+        opacity: 0;
+        transform: translateY(30px);
+        animation: fadeInUp 0.8s ease forwards;
+      }
+
+      .fade-in-up-delay-1 {
+        animation-delay: 0.1s;
+      }
+      .fade-in-up-delay-2 {
+        animation-delay: 0.2s;
+      }
+      .fade-in-up-delay-3 {
+        animation-delay: 0.3s;
+      }
+      .fade-in-up-delay-4 {
+        animation-delay: 0.4s;
+      }
+      .fade-in-up-delay-5 {
+        animation-delay: 0.5s;
+      }
+
+      @keyframes fadeInUp {
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Liquid blob shape */
+      .blob {
+        border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+        animation: blobMorph 8s ease-in-out infinite;
+      }
+
+      @keyframes blobMorph {
+        0%,
+        100% {
+          border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+        }
+        50% {
+          border-radius: 70% 30% 30% 70% / 70% 70% 30% 30%;
+        }
+      }
+
+      /* Glass button */
+      .glass-button {
+        background: rgba(255, 255, 255, 0.25);
+        backdrop-filter: blur(12px) saturate(180%);
+        -webkit-backdrop-filter: blur(12px) saturate(180%);
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+      }
+
+      .glass-button:hover {
+        background: rgba(255, 255, 255, 0.4);
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+        transform: translateY(-2px);
+      }
+
+      /* Scroll indicator */
+      .scroll-indicator {
+        animation: scrollBounce 2s ease-in-out infinite;
+      }
+
+      @keyframes scrollBounce {
+        0%,
+        100% {
+          transform: translateY(0);
+          opacity: 1;
+        }
+        50% {
+          transform: translateY(10px);
+          opacity: 0.5;
+        }
+      }
+
+      /* Stat counter glow */
+      .stat-glow {
+        text-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+      }
+
+      /* Privacy blur for sensitive stats */
+      .stat-blur {
+        filter: blur(4px);
+        -webkit-user-select: none;
+        user-select: none;
+      }
+
+      /* Fluid connector between sections */
+      .fluid-connector {
+        width: 100%;
+        height: 60px;
+        margin: -10px 0;
+        pointer-events: none;
+        overflow: hidden;
+      }
+
+      .fluid-path {
+        animation: fluidDash 3s linear infinite;
+      }
+
+      .fluid-path-delayed {
+        animation: fluidDash 5s linear infinite reverse;
+      }
+
+      @keyframes fluidDash {
+        to {
+          stroke-dashoffset: -28;
+        }
+      }
+
+      /* Scroll reveal */
+      [data-scroll-reveal] {
+        opacity: 0;
+        transform: translateY(30px);
+        transition:
+          opacity 0.7s ease,
+          transform 0.7s ease;
+      }
+
+      [data-scroll-reveal].scroll-revealed {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    </style>
+  </head>
+  <body class="min-h-full flex flex-col">
+    <div class="relative min-h-screen overflow-hidden">
+      <!-- Animated gradient background -->
+      <div class="gradient-bg fixed inset-0 -z-10"></div>
+
+      <!-- Floating orbs -->
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
+      <div class="orb orb-4"></div>
+
+      <!-- Navigation -->
+      <nav
+        class="glass mx-4 mt-4 px-6 py-4 flex items-center justify-between sticky top-4 z-50"
+      >
+        <div class="flex items-center gap-3">
+          <div
+            class="w-10 h-10 blob bg-gradient-to-br from-indigo-400 to-purple-200 flex items-center justify-center text-white font-bold text-lg"
+          >
+            <svg width="32" height="32" viewBox="0 0 48 48" fill="none">
+              <path
+                d="M12 32 L20 23 L27 29 L36 16"
+                stroke="#fff"
+                stroke-width="4"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></path>
+              <circle cx="36" cy="16" r="4.5" fill="#fff"></circle>
+            </svg>
+          </div>
+          <span class="text-slate-800 font-semibold text-lg hidden sm:block"
+            >Intelligence Revenue System</span
+          >
+        </div>
+        <div class="flex items-center gap-6">
+          <a
+            href="#features"
+            class="text-slate-600 hover:text-slate-900 transition-colors text-sm hidden md:block"
+            >Features</a
+          >
+          <a
+            href="#impact"
+            class="text-slate-600 hover:text-slate-900 transition-colors text-sm hidden md:block"
+            >Impact</a
+          >
+          <a
+            href="#how-it-works"
+            class="text-slate-600 hover:text-slate-900 transition-colors text-sm hidden md:block"
+            >How It Works</a
+          >
+          <a
+            href="#contact"
+            class="glass-button px-5 py-2 rounded-full text-slate-800 font-medium text-sm"
+            >Request Demo</a
+          >
+        </div>
+      </nav>
+
+      <!-- Hero Section -->
+      <section class="relative px-4 pt-20 pb-32 text-center">
+        <div class="max-w-5xl mx-auto">
+          <div class="fade-in-up inline-block mb-6">
+            <span
+              class="glass px-4 py-2 rounded-full text-sm text-slate-700 font-medium"
+              >✨ AI-Powered Community Intelligence Platform</span
+            >
+          </div>
+          <h1
+            class="fade-in-up fade-in-up-delay-1 text-5xl md:text-7xl font-bold tracking-tight mb-6 leading-tight"
+          >
+            <span class="shimmer-text">Transform</span> how your<br />
+            community <span class="shimmer-text">thrives</span>
+          </h1>
+          <p
+            class="fade-in-up fade-in-up-delay-2 text-xl md:text-2xl text-slate-600 max-w-3xl mx-auto mb-10 leading-relaxed"
+          >
+            A unified platform that gives nonprofit leaders AI-driven insights,
+            automated donor engagement, and real-time community analytics — all in one
+            beautifully simple interface.
+          </p>
+          <div
+            class="fade-in-up fade-in-up-delay-3 flex flex-col sm:flex-row gap-4 justify-center items-center"
+          >
+            <a
+              href="#features"
+              class="glass-button px-8 py-4 rounded-full text-slate-900 font-semibold text-lg"
+              >Explore the Platform →</a
+            >
+            <a
+              href="#impact"
+              class="px-8 py-4 rounded-full text-slate-700 font-medium text-lg hover:text-slate-900 transition-colors"
+              >See the Impact</a
+            >
+          </div>
+          <div class="scroll-indicator mt-20 text-slate-400">
+            <svg
+              class="w-6 h-6 mx-auto"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M19 14l-7 7m0 0l-7-7m7 7V3"
+              ></path>
+            </svg>
+          </div>
+        </div>
+      </section>
+
+      <!-- Stats Section -->
+      <section class="px-4 py-16" data-scroll-reveal>
+        <div class="max-w-6xl mx-auto">
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div class="glass-card p-6 text-center" data-scroll-reveal>
+              <div class="text-4xl font-bold stat-glow stat-blur text-indigo-600 mb-2">
+                46
+              </div>
+              <div class="text-slate-700 font-medium text-sm mb-1">
+                Community Members
+              </div>
+              <div class="text-slate-500 text-xs">
+                Rich profiles with engagement scores
+              </div>
+            </div>
+            <div class="glass-card p-6 text-center" data-scroll-reveal>
+              <div class="text-4xl font-bold stat-glow stat-blur text-indigo-600 mb-2">
+                $115K
+              </div>
+              <div class="text-slate-700 font-medium text-sm mb-1">
+                Total Donations Tracked
+              </div>
+              <div class="text-slate-500 text-xs">Across 9 organizational funds</div>
+            </div>
+            <div class="glass-card p-6 text-center" data-scroll-reveal>
+              <div class="text-4xl font-bold stat-glow text-indigo-600 mb-2">12</div>
+              <div class="text-slate-700 font-medium text-sm mb-1">
+                Automated Workflows
+              </div>
+              <div class="text-slate-500 text-xs">AI-powered outreach & engagement</div>
+            </div>
+            <div class="glass-card p-6 text-center" data-scroll-reveal>
+              <div class="text-4xl font-bold stat-glow text-indigo-600 mb-2">30+</div>
+              <div class="text-slate-700 font-medium text-sm mb-1">
+                Analytics Reports
+              </div>
+              <div class="text-slate-500 text-xs">Real-time dashboards & insights</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Features Section -->
+      <section id="features" class="px-4 py-24" data-scroll-reveal>
+        <div class="max-w-6xl mx-auto">
+          <div class="text-center mb-16">
+            <h2 class="text-4xl md:text-5xl font-bold text-slate-800 mb-4">
+              Everything your organization needs
+            </h2>
+            <p class="text-xl text-slate-600 max-w-2xl mx-auto">
+              From donor intelligence to automated outreach, every feature is designed
+              to help you build stronger community relationships.
+            </p>
+          </div>
+          <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="glass-card p-8" data-scroll-reveal>
+              <div class="text-4xl mb-4">📊</div>
+              <h3 class="text-xl font-semibold text-slate-800 mb-3">
+                Executive Dashboards
+              </h3>
+              <p class="text-slate-600 leading-relaxed">
+                Real-time visibility into donations, membership, engagement, and event
+                ROI — all in one screen.
+              </p>
+            </div>
+            <div class="glass-card p-8" data-scroll-reveal>
+              <div class="text-4xl mb-4">🤖</div>
+              <h3 class="text-xl font-semibold text-slate-800 mb-3">
+                AI-Driven Outreach
+              </h3>
+              <p class="text-slate-600 leading-relaxed">
+                Personalized donor messages, membership renewals, and event follow-ups
+                generated by AI with human approval.
+              </p>
+            </div>
+            <div class="glass-card p-8" data-scroll-reveal>
+              <div class="text-4xl mb-4">💬</div>
+              <h3 class="text-xl font-semibold text-slate-800 mb-3">
+                Telegram Integration
+              </h3>
+              <p class="text-slate-600 leading-relaxed">
+                Meet your community where they are. Bilingual messaging, identity
+                linking, and instant feedback loops.
+              </p>
+            </div>
+            <div class="glass-card p-8" data-scroll-reveal>
+              <div class="text-4xl mb-4">📈</div>
+              <h3 class="text-xl font-semibold text-slate-800 mb-3">
+                Donor Intelligence
+              </h3>
+              <p class="text-slate-600 leading-relaxed">
+                Giving capacity scoring, prospect identification, lapsed donor
+                re-engagement, and recurring gift tracking.
+              </p>
+            </div>
+            <div class="glass-card p-8" data-scroll-reveal>
+              <div class="text-4xl mb-4">🎉</div>
+              <h3 class="text-xl font-semibold text-slate-800 mb-3">
+                Event Management
+              </h3>
+              <p class="text-slate-600 leading-relaxed">
+                Campaign tracking, attendance analytics, satisfaction surveys, and
+                post-event feedback automation.
+              </p>
+            </div>
+            <div class="glass-card p-8" data-scroll-reveal>
+              <div class="text-4xl mb-4">📰</div>
+              <h3 class="text-xl font-semibold text-slate-800 mb-3">
+                Newsletter Generation
+              </h3>
+              <p class="text-slate-600 leading-relaxed">
+                AI-assisted CityNews compilation with submission intake, editorial
+                review, and automated Friday delivery.
+              </p>
+            </div>
+            <div class="glass-card p-8" data-scroll-reveal>
+              <div class="text-4xl mb-4">🔍</div>
+              <h3 class="text-xl font-semibold text-slate-800 mb-3">
+                Community Discovery
+              </h3>
+              <p class="text-slate-600 leading-relaxed">
+                AI-powered analysis of community networks, proximity mapping, and
+                involvement pattern recognition.
+              </p>
+            </div>
+            <div class="glass-card p-8" data-scroll-reveal>
+              <div class="text-4xl mb-4">🌐</div>
+              <h3 class="text-xl font-semibold text-slate-800 mb-3">
+                Multi-Org Architecture
+              </h3>
+              <p class="text-slate-600 leading-relaxed">
+                Built for consultants managing multiple nonprofits. Each org gets
+                isolated data, workflows, and branding.
+              </p>
+            </div>
+            <div class="glass-card p-8" data-scroll-reveal>
+              <div class="text-4xl mb-4">🔐</div>
+              <h3 class="text-xl font-semibold text-slate-800 mb-3">
+                Salesforce Native
+              </h3>
+              <p class="text-slate-600 leading-relaxed">
+                Runs on Salesforce with full CRM integration.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Impact Section -->
+      <section id="impact" class="px-4 py-24" data-scroll-reveal>
+        <div class="max-w-6xl mx-auto">
+          <div class="text-center mb-16">
+            <h2 class="text-4xl md:text-5xl font-bold text-slate-800 mb-4">
+              Real impact, measurable results
+            </h2>
+            <p class="text-xl text-slate-600 max-w-2xl mx-auto">
+              See how community organizations transform their operations with
+              intelligence-driven engagement.
+            </p>
+          </div>
+          <div class="grid md:grid-cols-2 gap-8">
+            <!-- Dashboard preview card -->
+            <div class="glass-card p-8" data-scroll-reveal>
+              <div class="flex items-center gap-3 mb-6">
+                <div
+                  class="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-xl"
+                >
+                  📊
+                </div>
+                <div>
+                  <h3 class="text-lg font-semibold text-slate-800">
+                    Executive Director Dashboard
+                  </h3>
+                  <p class="text-sm text-slate-500">Real-time overview</p>
+                </div>
+              </div>
+              <div class="space-y-4">
+                <div
+                  class="flex justify-between items-center p-4 bg-white/30 rounded-xl"
+                >
+                  <span class="text-slate-600 text-sm">Total Raised</span
+                  ><span class="text-2xl font-bold stat-blur text-indigo-600"
+                    >$115,475</span
+                  >
+                </div>
+                <div
+                  class="flex justify-between items-center p-4 bg-white/30 rounded-xl"
+                >
+                  <span class="text-slate-600 text-sm">Active Members</span
+                  ><span class="text-2xl font-bold stat-blur text-teal-600">46</span>
+                </div>
+                <div
+                  class="flex justify-between items-center p-4 bg-white/30 rounded-xl"
+                >
+                  <span class="text-slate-600 text-sm">At-Risk Members</span
+                  ><span class="text-2xl font-bold stat-blur text-rose-500">8</span>
+                </div>
+                <div
+                  class="flex justify-between items-center p-4 bg-white/30 rounded-xl"
+                >
+                  <span class="text-slate-600 text-sm">Avg Engagement Score</span
+                  ><span class="text-2xl font-bold stat-blur text-amber-500"
+                    >71/100</span
+                  >
+                </div>
+              </div>
+            </div>
+            <!-- Workflow preview card -->
+            <div class="glass-card p-8" data-scroll-reveal>
+              <div class="flex items-center gap-3 mb-6">
+                <div
+                  class="w-12 h-12 rounded-xl bg-gradient-to-br from-pink-500 to-rose-500 flex items-center justify-center text-white text-xl"
+                >
+                  🤖
+                </div>
+                <div>
+                  <h3 class="text-lg font-semibold text-slate-800">
+                    AI-Powered Workflows
+                  </h3>
+                  <p class="text-sm text-slate-500">12 active automations</p>
+                </div>
+              </div>
+              <div class="space-y-3">
+                <div
+                  class="flex justify-between items-center p-3 bg-white/30 rounded-lg"
+                >
+                  <span class="text-slate-700 text-sm"
+                    >Donor Retention & Acknowledgment</span
+                  ><span class="text-xs font-medium text-emerald-600">● Active</span>
+                </div>
+                <div
+                  class="flex justify-between items-center p-3 bg-white/30 rounded-lg"
+                >
+                  <span class="text-slate-700 text-sm">Membership Renewal Outreach</span
+                  ><span class="text-xs font-medium text-emerald-600">● Active</span>
+                </div>
+                <div
+                  class="flex justify-between items-center p-3 bg-white/30 rounded-lg"
+                >
+                  <span class="text-slate-700 text-sm">Post-Event Feedback Loop</span
+                  ><span class="text-xs font-medium text-emerald-600">● Active</span>
+                </div>
+                <div
+                  class="flex justify-between items-center p-3 bg-white/30 rounded-lg"
+                >
+                  <span class="text-slate-700 text-sm"
+                    >CityNews Newsletter Compilation</span
+                  ><span class="text-xs font-medium text-emerald-600">● Active</span>
+                </div>
+                <div
+                  class="flex justify-between items-center p-3 bg-white/30 rounded-lg"
+                >
+                  <span class="text-slate-700 text-sm"
+                    >Annual Cultural Heritage Greetings</span
+                  ><span class="text-xs font-medium text-emerald-600">● Active</span>
+                </div>
+                <div
+                  class="flex justify-between items-center p-3 bg-white/30 rounded-lg"
+                >
+                  <span class="text-slate-700 text-sm"
+                    >Emergency Relief Fund Tracker</span
+                  ><span class="text-xs font-medium text-emerald-600">● Active</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- How It Works -->
+      <section id="how-it-works" class="px-4 py-24" data-scroll-reveal>
+        <div class="max-w-5xl mx-auto">
+          <div class="text-center mb-16">
+            <h2 class="text-4xl md:text-5xl font-bold text-slate-800 mb-4">
+              How it works
+            </h2>
+            <p class="text-xl text-slate-600">
+              From data to insight to action — a seamless flow.
+            </p>
+          </div>
+          <div class="grid md:grid-cols-3 gap-8">
+            <div class="glass-card p-8 relative" data-scroll-reveal>
+              <div class="text-6xl font-bold text-indigo-200 absolute top-4 right-6">
+                01
+              </div>
+              <h3 class="text-2xl font-semibold text-slate-800 mb-4 relative">
+                Connect
+              </h3>
+              <p class="text-slate-600 leading-relaxed relative">
+                Salesforce CRM captures every member, donation, event, and interaction.
+                Custom fields track engagement, satisfaction, and giving capacity.
+              </p>
+            </div>
+            <div class="glass-card p-8 relative" data-scroll-reveal>
+              <div class="text-6xl font-bold text-indigo-200 absolute top-4 right-6">
+                02
+              </div>
+              <h3 class="text-2xl font-semibold text-slate-800 mb-4 relative">
+                Understand
+              </h3>
+              <p class="text-slate-600 leading-relaxed relative">
+                AI analyzes patterns across your community — who's engaged, who's at
+                risk, who has capacity to give more, and what messages resonate.
+              </p>
+            </div>
+            <div class="glass-card p-8 relative" data-scroll-reveal>
+              <div class="text-6xl font-bold text-indigo-200 absolute top-4 right-6">
+                03
+              </div>
+              <h3 class="text-2xl font-semibold text-slate-800 mb-4 relative">
+                Engage
+              </h3>
+              <p class="text-slate-600 leading-relaxed relative">
+                Automated workflows send personalized, AI-crafted messages via Telegram
+                and email. High-value outreach goes through human approval first.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Multi-Org Section -->
+      <section class="px-4 py-24" data-scroll-reveal>
+        <div class="max-w-5xl mx-auto">
+          <div class="glass-dark p-12 text-center text-white">
+            <h2 class="text-3xl md:text-4xl font-bold mb-6">
+              Built for consultants managing multiple organizations
+            </h2>
+            <p class="text-lg text-slate-300 max-w-3xl mx-auto mb-8 leading-relaxed">
+              Each organization gets its own isolated data tree, workflow
+              configurations, branding, and Salesforce org. Switch between organizations
+              seamlessly while maintaining complete data separation.
+            </p>
+            <div class="flex flex-wrap justify-center gap-4">
+              <span
+                class="px-4 py-2 rounded-full bg-white/10 border border-white/20 text-sm"
+                >Org-Isolated Data</span
+              >
+              <span
+                class="px-4 py-2 rounded-full bg-white/10 border border-white/20 text-sm"
+                >Per-Org Workflows</span
+              >
+              <span
+                class="px-4 py-2 rounded-full bg-white/10 border border-white/20 text-sm"
+                >Custom Branding</span
+              >
+              <span
+                class="px-4 py-2 rounded-full bg-white/10 border border-white/20 text-sm"
+                >Independent Salesforce Orgs</span
+              >
+              <span
+                class="px-4 py-2 rounded-full bg-white/10 border border-white/20 text-sm"
+                >Consultant Dashboard</span
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA Section -->
+      <section id="contact" class="px-4 py-24" data-scroll-reveal>
+        <div class="max-w-3xl mx-auto text-center">
+          <div class="glass p-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-slate-800 mb-6">
+              Ready to see it in action?
+            </h2>
+            <p class="text-xl text-slate-600 mb-8">
+              Get a personalized demo of the Intelligence Revenue System tailored to
+              your organization's needs.
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+              <a
+                href="mailto:contact@devartslab.com"
+                class="glass-button px-8 py-4 rounded-full text-slate-900 font-semibold text-lg"
+                >✉️ Request a Demo</a
+              >
+              <a
+                href="https://t.me/IntelligenceRevenueSystem"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="glass-button px-8 py-4 rounded-full text-slate-900 font-semibold text-lg"
+                >💬 Join on Telegram</a
+              >
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer class="px-4 py-12 mt-12">
+        <div class="max-w-6xl mx-auto">
+          <div
+            class="glass p-8 flex flex-col md:flex-row justify-between items-center gap-6"
+          >
+            <div class="flex items-center gap-3">
+              <div
+                class="w-8 h-8 blob bg-gradient-to-br from-indigo-400 to-purple-500"
+              ></div>
+              <span class="text-slate-700 font-medium"
+                >Intelligence Revenue System</span
+              >
+            </div>
+            <div class="text-sm text-slate-500 text-center md:text-right">
+              <p>AI-powered community intelligence for nonprofits</p>
+              <p class="mt-1">
+                Built with Salesforce · n8n · Next.js · Python · Generative AI
+              </p>
+            </div>
+          </div>
+          <div
+            class="mt-6 flex flex-col sm:flex-row items-center justify-center gap-4 pb-2"
+          >
+            <a
+              href="https://devartslab.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="flex items-center gap-2 text-sm text-slate-500 hover:text-slate-700 transition-colors"
+            >
+              <span class="inline-flex items-center gap-1.5">
+                <!-- Font Awesome duotone heart (fa-heart) -->
+                <svg xmlns="http://w3.org" viewBox="0 0 512 512" width="14" height="14">
+                  <path
+                    fill="currentColor"
+                    opacity="1.0"
+                    d="M47.6 300.4L228.3 469.1c7.5 7 17.4 10.9 27.7 10.9s20.2-3.9 27.7-10.9L464.4 300.4c30.4-28.3 47.6-68 47.6-109.5v-5.8C512 105.4 448.6 42 370 42c-40.7 0-79.7 17.5-107 47.9C236 59.5 197 42 156.3 42 77.7 42 14.3 105.4 14.3 185.1v5.8c0 41.5 17.2 81.2 47.6 109.5z"
+                  />
+                  <path
+                    fill="currentColor"
+                    opacity="0.4"
+                    d="M256 89.9C283.3 59.5 322.3 42 370 42c78.6 0 142 63.4 142 143.1v5.8c0 41.5-17.2 81.2-47.6 109.5L283.7 469.1c-7.5 7-17.4 10.9-27.7 10.9V89.9z"
+                  />
+                </svg>
+                Powered by DevArts Lab
+              </span>
+            </a>
+            <span class="text-slate-300 hidden sm:inline">·</span>
+            <a
+              href="mailto:contact@devartslab.com"
+              class="text-sm text-slate-500 hover:text-slate-700 transition-colors"
+              >contact@devartslab.com</a
+            >
+          </div>
+        </div>
+      </footer>
+    </div>
+
+    <!-- Scroll Reveal Script -->
+    <script>
+      (function () {
+        var observer = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (entry) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("scroll-revealed");
+                observer.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.15, rootMargin: "0px 0px -60px 0px" },
+        );
+        document.querySelectorAll("[data-scroll-reveal]").forEach(function (el) {
+          observer.observe(el);
+        });
+      })();
+    </script>
+  </body>
+</html>
